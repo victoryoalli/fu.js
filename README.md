@@ -78,6 +78,6 @@ import fu from '@victoryoalli/fu.js'
 
 ### Callbacks
 
-* onError(error): Called when the upload encounters an error.
-* onProgress(bytesUploaded, bytesTotal): Called periodically during the upload to report progress.
-* onSuccess(upload): Called when the upload completes successfully.
+* error(error): Called when the upload encounters an error.
+* progress(bytesUploaded, bytesTotal, percentage): Called periodically during the upload to report progress.
+* success(upload): Called when the upload completes successfully.
