@@ -30,7 +30,7 @@ npm install tus-js-client
 ```
 
 ```js
-import fu from './fu'
+import fu from '@victoryoalli/fu.js'
 
 //fu.host ="http://localhost:1231"
 //fu.folder ="files"
@@ -71,7 +71,7 @@ import fu from './fu'
 * host: The server host (default is derived from window.location).
 * folder: The folder path on the server where files should be uploaded (default is "/files").
 * baseUrl: A read-only property generated from host and folder.
- 
+
 ### Callbacks
 
 * onError(error): Called when the upload encounters an error.
