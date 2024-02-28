@@ -20,6 +20,10 @@ If not already included in your project, add `tus-js-client` by running:
 npm install tus-js-client
 ```
 
+```bash
+npm install @victoryoalli/fu.js
+```
+
 ## Basic Usage
 
 ```html
