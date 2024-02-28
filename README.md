@@ -48,19 +48,19 @@ import fu from '@victoryoalli/fu.js'
     if (input.files.length > 0) {
         var file = input.files[0];
 
-        fu.upload(file,
-        function(error) {
-            console.error("Failed because: ", error);
-        },
-        function(bytesUploaded, bytesTotal) {
-                var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
-                progress.textContent = "Upload is " + percentage + "% complete";
-        },
-        function(upload) {
-                console.log("Upload finished:", upload.url); // `upload.url` needs to be handled differently as `upload` is not defined in this scope
-                progress.textContent = "Upload finished!";
-        }
-                );
+    fu.upload(file)
+       .progress(function(bytesUploaded, bytesTotal, percentage) {
+         console.log("Percentage:", percentage);
+         progress.textContent = "Upload is " + percentage + "% complete";
+       })
+       .error(function(error) {
+        console.error("Failed because: ", error);
+       })
+       .success(function(upload) {
+         console.log("Upload finished:", upload.url);
+         progress.textContent = "Upload finished!";
+       }) ;
+
     } else {
         alert("Please select a file.");
     }
