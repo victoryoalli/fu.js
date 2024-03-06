@@ -1,6 +1,6 @@
 import * as tus from 'tus-js-client';
 
-const fu = (function () {
+const fu = (function() {
     let host = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
     let folder = "files";
     let baseUrl = `${host}/${folder}`;
@@ -12,28 +12,35 @@ const fu = (function () {
     // Initial call to set up the baseUrl with default or existing values
     updateBaseUrl();
 
-    function upload(file) {
+    function upload(file,json={}) {
         let successCallback, errorCallback, progressCallback;
+
+        const data = _toJsonString(json)
+        const url = new URL(baseUrl);
+        const queryString = url.search;
 
         let upload = new tus.Upload(file, {
             endpoint: baseUrl,
             retryDelays: [0, 1000, 3000, 5000],
             metadata: {
                 filename: file.name,
-                filetype: file.type
+                filetype: file.type,
+                data:data,
+                queryString:queryString
+
             },
-            onError: function (error) {
+            onError: function(error) {
                 if (typeof errorCallback === 'function') {
                     errorCallback(error);
                 }
             },
-            onProgress: function (bytesUploaded, bytesTotal) {
+            onProgress: function(bytesUploaded, bytesTotal) {
                 if (typeof progressCallback === 'function') {
                     let percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
                     progressCallback(bytesUploaded, bytesTotal, percentage);
                 }
             },
-            onSuccess: function () {
+            onSuccess: function() {
                 if (typeof successCallback === 'function') {
                     successCallback(upload);
                 }
@@ -43,15 +50,15 @@ const fu = (function () {
         upload.start();
 
         return {
-            success: function (fn) {
+            success: function(fn) {
                 successCallback = fn;
                 return this;
             },
-            error: function (fn) {
+            error: function(fn) {
                 errorCallback = fn;
                 return this;
             },
-            progress: function (fn) {
+            progress: function(fn) {
                 progressCallback = fn;
                 return this;
             }
@@ -80,4 +87,18 @@ const fu = (function () {
     };
 })();
 
+function _toJsonString(input) {
+    if (typeof input === 'string') {
+        try {
+            JSON.parse(input);
+            return input;
+        } catch (error) {
+            return JSON.stringify({value: input});
+        }
+    } else if (typeof input === 'object' && input !== null) {
+        return JSON.stringify(input);
+    } else {
+        return JSON.stringify(null);
+    }
+}
 export default fu;
